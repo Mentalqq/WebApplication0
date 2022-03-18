@@ -48,14 +48,14 @@ namespace WebApplication1
                     Description = "Authentication and Authorization in ASP.NET 3.1 with JWT and Swagger"
                 });
                 // To Enable authorization using Swagger (JWT)
-                swagger.AddSecurityDefinition("ABC", new OpenApiSecurityScheme()
+                swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey,
-                    Scheme = "ABC",
+                    Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter ‘ABC’ [space] and then your valid token in the text input below.\r\n\r\nExample: \"ABC eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
+                    Description = "Enter ‘Bearer’ [space] and then your valid token in the text input below.\r\n\r\nExample: \"ABC eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
                 });
                 swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -65,7 +65,7 @@ namespace WebApplication1
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = "ABC"
+                                Id = "Bearer"
                             }
                         },
                         new string[] {}

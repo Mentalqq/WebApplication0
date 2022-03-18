@@ -20,12 +20,12 @@ namespace WebApplication1.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IConfiguration _configuration;
+        //private readonly IConfiguration _configuration;
 
         public AuthenticateController(IMediator mediator, IConfiguration configuration)
         {
             _mediator = mediator;
-            _configuration = configuration;
+            //_configuration = configuration;
         }
 
         [HttpPost("login")]
