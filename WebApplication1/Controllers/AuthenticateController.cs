@@ -29,11 +29,11 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] Client model)
+        public async Task<IActionResult> Login([FromBody] User model)
         {
-            var existClient = await _mediator.Send(new GetClientById.Query { Id = model.Id });
+            var existUser = await _mediator.Send(new GetUserById.Query { Id = model.Id });
             var identity = await GetIdentity(model);
-            if (existClient != null)
+            if (existUser != null)
             {
                 //var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT: SecretKey"]));
                 var token = new JwtSecurityToken(
@@ -52,14 +52,14 @@ namespace WebApplication1.Controllers
             }
             return Unauthorized();
         }
-        private async Task<ClaimsIdentity> GetIdentity(Client client)
+        private async Task<ClaimsIdentity> GetIdentity(User model)
         {
-            Client _client = await _mediator.Send(new GetClientById.Query { Id = client.Id });
-            if (_client != null)
+            User _user = await _mediator.Send(new GetUserById.Query { Id = model.Id });
+            if (_user != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, _client.Name)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, _user.FirstName)
                 };
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,

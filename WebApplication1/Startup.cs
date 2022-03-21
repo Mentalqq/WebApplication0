@@ -31,14 +31,8 @@ namespace WebApplication1
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<ConnectionStringOptions>(Configuration.GetSection("ConnectionString"));
-
+            services.Configure<DapperConnectionOptions>(Configuration.GetSection("ConnectionStrings"));
             services.AddScoped<IRepository, Repository>();
-
-            /*services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MediatR Examples Api", Version = "v1" });
-            });*/
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo

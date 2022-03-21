@@ -13,55 +13,55 @@ namespace WebApplication1.Data
 {
     public interface IRepository
     {
-        Task<Client> AddAsync(Client client);
-        Task<IEnumerable<Client>> GetAllAsync();
-        Task<Client> GetByIdAsync(int id);
-        Task<Client> UpdateAsync(Client client);
-        Task<Client> DeleteAsync(int id);
+        Task<User> AddAsync(User user);
+        Task<IEnumerable<User>> GetAllAsync();
+        Task<User> GetByIdAsync(long id);
+        Task<User> UpdateAsync(User user);
+        Task<User> DeleteAsync(long id);
     }
     public class Repository : IRepository
     {
         string connectionString = null;
-        public Repository(IOptions<ConnectionStringOptions> options)
+        public Repository(IOptions<DapperConnectionOptions> options)
         {
-            connectionString = options.Value.connectionString;
+            connectionString = options.Value.SqlServerConnection;
         }
 
-        public async Task<IEnumerable<Client>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = await db.QueryAsync<Client>("select * from Users");
+                var sqlQuery = await db.QueryAsync<User>("select * from Users");
                 return sqlQuery.ToList();
             }
         }
-        public async Task<Client> GetByIdAsync(int id)
+        public async Task<User> GetByIdAsync(long id)
         {
             using(IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = await db.QueryAsync<Client>("select * from Users where Id = @id", new {id});
+                var sqlQuery = await db.QueryAsync<User>("select * from Users where Id = @id", new {id});
                 return sqlQuery.FirstOrDefault();
             }
         }
-        public async Task<Client> AddAsync(Client client)
+        public async Task<User> AddAsync(User user)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "insert into Users (Name, Age) values (@Name, @Age)";
-                await db.ExecuteAsync(sqlQuery, client);
+                var sqlQuery = "insert into Users (FirstName, LastName, Email, Age) values (@FirstName, @LastName, @Email, @Age)";
+                await db.ExecuteAsync(sqlQuery, user);
             }
-            return client;
+            return user;
         }
-        public async Task<Client> UpdateAsync(Client client)
+        public async Task<User> UpdateAsync(User user)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "update Users set Name = @Name, Age = @Age where Id = @id";
-                await db.ExecuteAsync(sqlQuery, client);
+                var sqlQuery = "update Users set FirstName = @FirstName, LastName = @LastName, Email = @Email, Age = @Age where Id = @id";
+                await db.ExecuteAsync(sqlQuery, user);
             }
-            return client;
+            return user;
         }
-        public async Task<Client> DeleteAsync(int id)
+        public async Task<User> DeleteAsync(long id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {

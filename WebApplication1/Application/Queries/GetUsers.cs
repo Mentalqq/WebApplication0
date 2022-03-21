@@ -8,13 +8,13 @@ using WebApplication1.Domain;
 
 namespace WebApplication1.Application.Queries
 {
-    public class GetClients
+    public class GetUsers
     {
-        public class Query : IRequest<List<Client>>
+        public class Query : IRequest<List<User>>
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
         }
-        public class Handler : IRequestHandler<Query, List<Client>>
+        public class Handler : IRequestHandler<Query, List<User>>
         {
             private IRepository _repository;
             public Handler(IRepository repository)
@@ -22,7 +22,7 @@ namespace WebApplication1.Application.Queries
                 _repository = repository;
             }
 
-            public async Task<List<Client>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<User>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var responce = await _repository.GetAllAsync();
                 return responce.ToList();

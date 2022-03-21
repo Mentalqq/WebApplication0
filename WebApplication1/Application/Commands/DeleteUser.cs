@@ -6,20 +6,20 @@ using WebApplication1.Domain;
 
 namespace WebApplication1.Application.Commands
 {
-    public class DeleteClient
+    public class DeleteUser
     {
-        public class Command : IRequest<Client>
+        public class Command : IRequest<User>
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
         }
-        public class Handler : IRequestHandler<Command, Client>
+        public class Handler : IRequestHandler<Command, User>
         {
             private IRepository _repository;
             public Handler(IRepository repository)
             {
                 _repository = repository;
             }
-            public async Task<Client> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<User> Handle(Command request, CancellationToken cancellationToken)
             {
                 return await _repository.DeleteAsync(request.Id);
             }
