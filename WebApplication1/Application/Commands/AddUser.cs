@@ -6,22 +6,22 @@ using WebApplication1.Domain;
 
 namespace WebApplication1.Application.Commands
 {
-    public class AddClient
+    public class AddUser
     {
-        public class Command : IRequest<Client>
+        public class Command : IRequest<User>
         {
-            public Client Client { get; set; }
+            public User User { get; set; }
         }
-        public class Handler : IRequestHandler<Command, Client>
+        public class Handler : IRequestHandler<Command, User>
         {
             private IRepository _repository;
             public Handler(IRepository repository)
             {
                 _repository = repository;
             }
-            public async Task<Client> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<User> Handle(Command request, CancellationToken cancellationToken)
             {
-                return await _repository.AddAsync(request.Client);
+                return await _repository.AddAsync(request.User);
             }
         }
     }

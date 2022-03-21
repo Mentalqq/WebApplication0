@@ -8,20 +8,20 @@ using WebApplication1.Domain;
 
 namespace WebApplication1.Application.Queries
 {
-    public static class GetClientById
+    public static class GetUserById
     {
-        public class Query : IRequest<Client>
+        public class Query : IRequest<User>
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
         }
-        public class Handler : IRequestHandler<Query, Client>
+        public class Handler : IRequestHandler<Query, User>
         {
             private readonly IRepository _repository;
             public Handler(IRepository repository)
             {
                 _repository = repository;
             }
-            public async Task<Client> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
                 var responce = await _repository.GetByIdAsync(request.Id);
                 return responce;
