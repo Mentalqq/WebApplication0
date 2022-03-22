@@ -21,7 +21,7 @@ namespace WebApplication1.Data
     }
     public class Repository : IRepository
     {
-        string connectionString = null;
+        private readonly string connectionString = null;
         public Repository(IOptions<DapperConnectionOptions> options)
         {
             connectionString = options.Value.SqlServerConnection;
@@ -47,7 +47,7 @@ namespace WebApplication1.Data
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "insert into Users (FirstName, LastName, Email, Age) values (@FirstName, @LastName, @Email, @Age)";
+                var sqlQuery = "insert into Users (UserKey,FirstName, LastName, Email, Age) values (@UserKey ,@FirstName, @LastName, @Email, @Age)";
                 await db.ExecuteAsync(sqlQuery, user);
             }
             return user;

@@ -62,7 +62,8 @@ namespace WebApplication1.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                Age = user.Age
+                Age = user.Age,
+                CreatedDate = user.CreatedDate,
             };
             var result = await _mediator.Send(new UpdateUser.Command { User = _user });
             return Ok(result);
