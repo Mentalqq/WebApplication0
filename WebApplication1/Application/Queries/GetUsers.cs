@@ -16,15 +16,15 @@ namespace WebApplication1.Application.Queries
         }
         public class Handler : IRequestHandler<Query, List<User>>
         {
-            private IRepository _repository;
-            public Handler(IRepository repository)
+            private IUserRepository repository;
+            public Handler(IUserRepository repository)
             {
-                _repository = repository;
+                this.repository = repository;
             }
 
             public async Task<List<User>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var responce = await _repository.GetAllAsync();
+                var responce = await repository.GetAllAsync();
                 return responce.ToList();
             }
         }

@@ -19,19 +19,19 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator mediator;
         //private readonly IConfiguration _configuration;
 
         public AuthenticateController(IMediator mediator, IConfiguration configuration)
         {
-            _mediator = mediator;
+            this.mediator = mediator;
             //_configuration = configuration;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] User model)
         {
-            var existUser = await _mediator.Send(new GetUserById.Query { Id = model.Id });
+            var existUser = await mediator.Send(new GetUserById.Query { Id = model.Id });
             var identity = await GetIdentity(model);
             if (existUser != null)
             {
@@ -52,14 +52,14 @@ namespace WebApplication1.Controllers
             }
             return Unauthorized();
         }
-        private async Task<ClaimsIdentity> GetIdentity(User model)
+        private async Task<ClaimsIdentity> GetIdentity(User user)
         {
-            User _user = await _mediator.Send(new GetUserById.Query { Id = model.Id });
-            if (_user != null)
+            User existUser = await mediator.Send(new GetUserById.Query { Id = user.Id });
+            if (existUser != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, _user.FirstName)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, existUser.FirstName)
                 };
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,

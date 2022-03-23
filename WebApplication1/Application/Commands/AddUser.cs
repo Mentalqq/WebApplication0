@@ -14,14 +14,14 @@ namespace WebApplication1.Application.Commands
         }
         public class Handler : IRequestHandler<Command, User>
         {
-            private IRepository _repository;
-            public Handler(IRepository repository)
+            private IUserRepository repository;
+            public Handler(IUserRepository repository)
             {
-                _repository = repository;
+                this.repository = repository;
             }
             public async Task<User> Handle(Command request, CancellationToken cancellationToken)
             {
-                return await _repository.AddAsync(request.User);
+                return await repository.AddAsync(request.User);
             }
         }
     }

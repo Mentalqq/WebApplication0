@@ -11,7 +11,7 @@ using WebApplication1.Domain;
 
 namespace WebApplication1.Data
 {
-    public interface IRepository
+    public interface IUserRepository
     {
         Task<User> AddAsync(User user);
         Task<IEnumerable<User>> GetAllAsync();
@@ -19,10 +19,10 @@ namespace WebApplication1.Data
         Task<User> UpdateAsync(User user);
         Task<User> DeleteAsync(long id);
     }
-    public class Repository : IRepository
+    public class UserRepository : IUserRepository
     {
         private readonly string connectionString = null;
-        public Repository(IOptions<DapperConnectionOptions> options)
+        public UserRepository(IOptions<DapperConnectionOptions> options)
         {
             connectionString = options.Value.SqlServerConnection;
         }

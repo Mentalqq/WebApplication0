@@ -16,14 +16,14 @@ namespace WebApplication1.Application.Queries
         }
         public class Handler : IRequestHandler<Query, User>
         {
-            private readonly IRepository _repository;
-            public Handler(IRepository repository)
+            private readonly IUserRepository repository;
+            public Handler(IUserRepository repository)
             {
-                _repository = repository;
+                this.repository = repository;
             }
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
-                var responce = await _repository.GetByIdAsync(request.Id);
+                var responce = await repository.GetByIdAsync(request.Id);
                 return responce;
             }
         }

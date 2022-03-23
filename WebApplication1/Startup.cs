@@ -32,7 +32,7 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<DapperConnectionOptions>(Configuration.GetSection("ConnectionStrings"));
-            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo
