@@ -1,4 +1,4 @@
-use Test;
+use UsersDb;
 
 if not exists(select * from sysobjects where name = 'Users' and xtype = 'U')
 begin
