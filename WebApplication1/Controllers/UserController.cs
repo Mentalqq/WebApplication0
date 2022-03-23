@@ -51,12 +51,12 @@ namespace WebApplication1.Controllers
         [HttpPut("users/{id}")]
         public async Task<IActionResult> UpdateAsync(User user)
         {
-            var existUser = await mediator.Send(new GetUserById.Query { Id = user.Id });
+            User existUser = await mediator.Send(new GetUserById.Query { Id = user.Id });
             if(existUser == null)
             {
                 return BadRequest($"No client found with the id {user.Id}");
             }
-            var updatedUser = new User()
+            User updatedUser = new User()
             {
                 Id = existUser.Id, //Dont work without it, need create UserModel :D
                 FirstName = user.FirstName,

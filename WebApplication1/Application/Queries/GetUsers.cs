@@ -24,7 +24,7 @@ namespace WebApplication1.Application.Queries
 
             public async Task<List<User>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var responce = await repository.GetAllAsync();
+                IEnumerable<User> responce = await repository.GetAllAsync();
                 return responce.ToList();
             }
         }

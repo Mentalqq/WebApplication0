@@ -23,7 +23,7 @@ namespace WebApplication1.Application.Queries
             }
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
-                var responce = await repository.GetByIdAsync(request.Id);
+                User responce = await repository.GetByIdAsync(request.Id);
                 return responce;
             }
         }
