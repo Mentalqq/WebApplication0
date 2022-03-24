@@ -11,6 +11,6 @@ Email nvarchar(128) unique not null,
 Age int not null,
 CreatedDate datetime2,
 ModifiedDate datetime2)
-create index EmailIndex on Users(Email);
-create index UserKeyIndex on Users(UserKey);
+create index IX_Users_Email on Users(Email);
+create index IX_Users_UserKey on Users(UserKey);
 end

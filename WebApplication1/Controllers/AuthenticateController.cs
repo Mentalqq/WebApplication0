@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using WebApplication1.Application.Queries;
 using WebApplication1.Domain;
 using WebApplication1.Application.Options;
+using WebApplication1.ViewModel;
 
 namespace WebApplication1.Controllers
 {
@@ -22,7 +23,7 @@ namespace WebApplication1.Controllers
         private readonly IMediator mediator;
         //private readonly IConfiguration _configuration;
 
-        public AuthenticateController(IMediator mediator, IConfiguration configuration)
+        public AuthenticateController(IMediator mediator)//, IConfiguration configuration)
         {
             this.mediator = mediator;
             //_configuration = configuration;
@@ -54,12 +55,12 @@ namespace WebApplication1.Controllers
         }
         private async Task<ClaimsIdentity> GetIdentity(User user)
         {
-            User existUser = await mediator.Send(new GetUserById.Query { Id = user.Id });
+            var existUser = new UserGetByIdResponse { User = await mediator.Send(new GetUserById.Query { Id = user.Id }) };
             if (existUser != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, existUser.FirstName)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, existUser.User.FirstName)
                 };
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,

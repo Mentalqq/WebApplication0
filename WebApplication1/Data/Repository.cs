@@ -16,7 +16,7 @@ namespace WebApplication1.Data
         Task<User> AddAsync(User user);
         Task<IEnumerable<User>> GetAllAsync();
         Task<User> GetByIdAsync(long id);
-        Task<User> UpdateAsync(User user);
+        Task<User> UpdateAsync(User user, long id);
         Task<User> DeleteAsync(long id);
     }
     public class UserRepository : IUserRepository
@@ -37,7 +37,7 @@ namespace WebApplication1.Data
         }
         public async Task<User> GetByIdAsync(long id)
         {
-            using(IDbConnection db = new SqlConnection(connectionString))
+            using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = await db.QueryAsync<User>("select * from Users where Id = @id", new {id});
                 return sqlQuery.FirstOrDefault();
@@ -52,12 +52,14 @@ namespace WebApplication1.Data
             }
             return user;
         }
-        public async Task<User> UpdateAsync(User user)
+        public async Task<User> UpdateAsync(User user, long id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "update Users set FirstName = @FirstName, LastName = @LastName, Email = @Email, Age = @Age where Id = @id";
-                await db.ExecuteAsync(sqlQuery, user);
+                var sqlQuery = "update Users set FirstName = @FirstName, LastName = @LastName, Email = @Email, Age = @Age, ModifiedDate = @ModifiedDate where Id = @Id";
+                var parameters = new { Id = id, FirstName = user.FirstName, LastName = user.LastName,
+                    Email = user.Email, Age = user.Age, ModifiedDate = user.ModifiedDate };
+                await db.ExecuteAsync(sqlQuery, parameters);
             }
             return user;
         }
@@ -66,9 +68,12 @@ namespace WebApplication1.Data
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "delete from Users where Id = @id";
-                await db.ExecuteAsync(sqlQuery, new {id});
+                //await db.ExecuteAsync(sqlQuery, new {id});
             }
-            return await GetByIdAsync(id);
+
+            var ttt = await GetByIdAsync(id);
+            return ttt; // -_-
+            //return await GetByIdAsync(id);
         }
     }
 }

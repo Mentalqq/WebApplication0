@@ -87,3 +87,4 @@ C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\obj\Deb
 C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.RazorTargetAssemblyInfo.cache
 C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.csproj.CopyComplete
 C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.genruntimeconfig.cache
+C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\bin\Debug\netcoreapp3.1\AutoMapper.dll
