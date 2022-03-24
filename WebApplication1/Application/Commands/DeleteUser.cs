@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using WebApplication1.Application.Options;
@@ -17,14 +18,15 @@ namespace WebApplication1.Application.Commands
         public class Handler : IRequestHandler<Command, UserDto>
         {
             private readonly IUserRepository repository;
-            public Handler(IUserRepository repository)
+            private IMapper mapper;
+            public Handler(IUserRepository repository, IMapper mapper)
             {
                 this.repository = repository;
+                this.mapper = mapper;
             }
             public async Task<UserDto> Handle(Command request, CancellationToken cancellationToken)
             {
-                return MapperConfig.MapperUserToUserDto().Map<User, UserDto>(
-                   await repository.DeleteAsync(request.Id));
+                return mapper.Map<UserDto>(await repository.DeleteAsync(request.Id));
             }
         }
     }

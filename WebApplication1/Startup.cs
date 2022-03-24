@@ -67,6 +67,7 @@ namespace WebApplication1
                 });
         });
 
+            services.AddAutoMapper(typeof(Startup));
             services.AddMediatR(typeof(Startup));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

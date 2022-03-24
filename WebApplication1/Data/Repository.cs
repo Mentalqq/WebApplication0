@@ -65,15 +65,13 @@ namespace WebApplication1.Data
         }
         public async Task<User> DeleteAsync(long id)
         {
+            var deletedUser = await GetByIdAsync(id);
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "delete from Users where Id = @id";
-                //await db.ExecuteAsync(sqlQuery, new {id});
+                await db.ExecuteAsync(sqlQuery, new {id});
             }
-
-            var ttt = await GetByIdAsync(id);
-            return ttt; // -_-
-            //return await GetByIdAsync(id);
+            return deletedUser;
         }
     }
 }

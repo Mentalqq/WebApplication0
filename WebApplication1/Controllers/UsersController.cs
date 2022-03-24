@@ -19,10 +19,12 @@ namespace WebApplication1.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator mediator;
+        private readonly IMapper mapper;
 
-        public UsersController(IMediator mediator)
+        public UsersController(IMediator mediator, IMapper mapper)
         {
             this.mediator = mediator;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -47,8 +49,8 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] UserAddRequest user)
         {
-            UserDto userDto = MapperConfig.MapperUserAddRequestToUserDto().Map<UserAddRequest, UserDto>(user);
-            var result = await mediator.Send(new AddUser.Command { UserDto = userDto });
+            var result = await mediator.Send(new AddUser.Command { 
+                UserDto = mapper.Map<UserDto>(user) });
             return Ok(result);
         }
 
@@ -60,8 +62,8 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest($"No client found with the id {id}");
             }
-            UserDto userDto = MapperConfig.MapperUserUpdateRequestToUserDto().Map<UserUpdateRequest, UserDto>(user);
-            var result = await mediator.Send(new UpdateUser.Command { Id = id, UserDto = userDto });
+            var result = await mediator.Send(new UpdateUser.Command { 
+                Id = id, UserDto = mapper.Map<UserDto>(user) });
             return Ok(result);
         }
         

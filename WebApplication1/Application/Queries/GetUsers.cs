@@ -20,15 +20,16 @@ namespace WebApplication1.Application.Queries
         public class Handler : IRequestHandler<Query, List<UserDto>>
         {
             private readonly IUserRepository repository;
-            public Handler(IUserRepository repository)
+            private IMapper mapper;
+            public Handler(IUserRepository repository, IMapper mapper)
             {
                 this.repository = repository;
+                this.mapper = mapper;
             }
 
             public async Task<List<UserDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return MapperConfig.MapperUserToUserDto().Map<IEnumerable<User>, IEnumerable<UserDto>>(
-                    await repository.GetAllAsync()).ToList();
+                return mapper.Map<List<UserDto>>(await repository.GetAllAsync()).ToList();
             }
         }
     }

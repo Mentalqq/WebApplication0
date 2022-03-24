@@ -8,7 +8,7 @@ using WebApplication1.DTO;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorizedUsersController : ControllerBase

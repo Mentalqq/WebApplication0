@@ -18,14 +18,15 @@ namespace WebApplication1.Application.Commands
         public class Handler : IRequestHandler<Command, User>
         {
             private readonly IUserRepository repository;
-            public Handler(IUserRepository repository)
+            private IMapper mapper;
+            public Handler(IUserRepository repository, IMapper mapper)
             {
                 this.repository = repository;
+                this.mapper = mapper;
             }
             public async Task<User> Handle(Command request, CancellationToken cancellationToken)
             {
-                User user = MapperConfig.MapperUserDtoToUser().Map<UserDto, User>(request.UserDto);
-                return await repository.AddAsync(user);
+                return await repository.AddAsync(mapper.Map<User>(request.UserDto));
             }
         }
     }

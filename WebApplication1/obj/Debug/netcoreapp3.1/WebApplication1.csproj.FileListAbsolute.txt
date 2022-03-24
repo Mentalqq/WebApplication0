@@ -88,3 +88,7 @@ C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\obj\Deb
 C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.csproj.CopyComplete
 C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.genruntimeconfig.cache
 C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\bin\Debug\netcoreapp3.1\AutoMapper.dll
+C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.dll
+C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
+C:\Users\artem.koliadintsev\source\repos\WebApplication0\WebApplication1\bin\Debug\netcoreapp3.1\System.Runtime.CompilerServices.Unsafe.dll
