@@ -68,7 +68,7 @@ namespace WebApplication1.Data
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "delete from Users where Id = @id";
-                //await db.ExecuteAsync(sqlQuery, new {id});
+                await db.ExecuteAsync(sqlQuery, new {id});
             }
 
             var ttt = await GetByIdAsync(id);
