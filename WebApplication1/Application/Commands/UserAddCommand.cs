@@ -15,7 +15,7 @@ namespace WebApplication1.Application.Commands
         public sealed class UserAddCommandHandler : IRequestHandler<UserAddCommand, User>
         {
             private readonly IUserRepository repository;
-            private IMapper mapper;
+            private readonly IMapper mapper;
             public UserAddCommandHandler(IUserRepository repository, IMapper mapper)
             {
                 this.repository = repository;

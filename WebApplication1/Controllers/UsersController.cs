@@ -62,7 +62,7 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest($"No client found with the id {id}");
             }
-            var result = await mediator.Send(new UserUpdateCommand { 
+            bool result = await mediator.Send(new UserUpdateCommand { 
                 Id = id, UserDto = mapper.Map<UserDto>(user) });
             return Ok(result);
         }

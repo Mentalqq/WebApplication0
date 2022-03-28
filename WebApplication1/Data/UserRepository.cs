@@ -16,8 +16,8 @@ namespace WebApplication1.Data
         Task<User> AddAsync(User user);
         Task<IEnumerable<User>> GetAllAsync();
         Task<User> GetByIdAsync(long id);
-        Task<User> UpdateAsync(User user, long id);
-        Task<User> DeleteAsync(long id);
+        Task<bool> UpdateAsync(User user, long id);
+        Task<bool> DeleteAsync(long id);
     }
     public class UserRepository : IUserRepository
     {
@@ -47,32 +47,37 @@ namespace WebApplication1.Data
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "insert into Users (UserKey,FirstName, LastName, Email, Age) " +
-                    "values (@UserKey ,@FirstName, @LastName, @Email, @Age)";
+                user.CreatedDate = DateTime.UtcNow;
+                var sqlQuery = "insert into Users (UserKey,FirstName, LastName, Email, Age, CreatedDate) " +
+                    "values (@UserKey ,@FirstName, @LastName, @Email, @Age, @CreatedDate)";
                 await db.ExecuteAsync(sqlQuery, user);
             }
             return user;
         }
-        public async Task<User> UpdateAsync(User user, long id)
+        public async Task<bool> UpdateAsync(User user, long id)
         {
+            if (GetByIdAsync(id) is null)
+                return false;
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "update Users set FirstName = @FirstName, LastName = @LastName, Email = @Email, Age = @Age, ModifiedDate = @ModifiedDate where Id = @Id";
-                var parameters = new { Id = id, FirstName = user.FirstName, LastName = user.LastName,
-                    Email = user.Email, Age = user.Age, ModifiedDate = DateTime.UtcNow };
+                var sqlQuery = "update Users set FirstName = @FN, LastName = @LN, Email = @E, " +
+                    "Age = @A, ModifiedDate = @MD where Id = @Id";
+                var parameters = new { Id = id, FN = user.FirstName, LN = user.LastName,
+                    E = user.Email, A = user.Age, MD = DateTime.UtcNow };
                 await db.ExecuteAsync(sqlQuery, parameters);
             }
-            return user;
+            return true;
         }
-        public async Task<User> DeleteAsync(long id)
+        public async Task<bool> DeleteAsync(long id)
         {
-            var deletedUser = await GetByIdAsync(id);
+            if (GetByIdAsync(id) is null)
+                return false;
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "delete from Users where Id = @id";
                 await db.ExecuteAsync(sqlQuery, new {id});
             }
-            return deletedUser;
+            return true;
         }
     }
 }

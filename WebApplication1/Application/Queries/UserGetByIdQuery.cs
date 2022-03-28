@@ -21,7 +21,7 @@ namespace WebApplication1.Application.Queries
         public sealed class UserGetByIdQueryHandler : IRequestHandler<UserGetByIdQuery, UserDto>
         {
             private readonly IUserRepository repository;
-            private IMapper mapper;
+            private readonly IMapper mapper;
             public UserGetByIdQueryHandler(IUserRepository repository, IMapper mapper)
             {
                 this.repository = repository;
