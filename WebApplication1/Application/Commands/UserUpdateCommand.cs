@@ -9,24 +9,22 @@ using WebApplication1.DTO;
 
 namespace WebApplication1.Application.Commands
 {
-    public class AddUser
+    public class UserUpdateCommand : IRequest<User>
     {
-        public class Command : IRequest<User>
-        {
-            public UserDto UserDto { get; set; }
-        }
-        public class Handler : IRequestHandler<Command, User>
+        public long Id { get; set; }
+        public UserDto UserDto { get; set; }
+        public sealed class UserUpdateCommandHandler : IRequestHandler<UserUpdateCommand, User>
         {
             private readonly IUserRepository repository;
             private IMapper mapper;
-            public Handler(IUserRepository repository, IMapper mapper)
+            public UserUpdateCommandHandler(IUserRepository repository, IMapper mapper)
             {
                 this.repository = repository;
                 this.mapper = mapper;
             }
-            public async Task<User> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<User> Handle(UserUpdateCommand request, CancellationToken cancellationToken)
             {
-                return await repository.AddAsync(mapper.Map<User>(request.UserDto));
+                return await repository.UpdateAsync(mapper.Map<User>(request.UserDto), request.Id);
             }
         }
     }

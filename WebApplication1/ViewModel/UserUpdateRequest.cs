@@ -19,7 +19,5 @@ namespace WebApplication1.ViewModel
 
         [Required]
         public int Age { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
     }
 }

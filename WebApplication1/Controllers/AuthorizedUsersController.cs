@@ -23,7 +23,7 @@ namespace WebApplication1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(long id)
         {
-            UserDto deletedUser = await mediator.Send(new DeleteUser.Command { Id = id });
+            UserDto deletedUser = await mediator.Send(new UserDeleteCommand(id));
             return Ok(deletedUser);
         }
     }

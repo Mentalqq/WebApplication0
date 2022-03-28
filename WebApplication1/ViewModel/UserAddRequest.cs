@@ -22,10 +22,5 @@ namespace WebApplication1.ViewModel
 
         [Required]
         public int Age { get; set; }
-
-        [Required]
-        public DateTime CreatedDate { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
     }
 }

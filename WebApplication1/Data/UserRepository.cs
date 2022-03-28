@@ -47,7 +47,8 @@ namespace WebApplication1.Data
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "insert into Users (UserKey,FirstName, LastName, Email, Age) values (@UserKey ,@FirstName, @LastName, @Email, @Age)";
+                var sqlQuery = "insert into Users (UserKey,FirstName, LastName, Email, Age) " +
+                    "values (@UserKey ,@FirstName, @LastName, @Email, @Age)";
                 await db.ExecuteAsync(sqlQuery, user);
             }
             return user;
@@ -58,7 +59,7 @@ namespace WebApplication1.Data
             {
                 var sqlQuery = "update Users set FirstName = @FirstName, LastName = @LastName, Email = @Email, Age = @Age, ModifiedDate = @ModifiedDate where Id = @Id";
                 var parameters = new { Id = id, FirstName = user.FirstName, LastName = user.LastName,
-                    Email = user.Email, Age = user.Age, ModifiedDate = user.ModifiedDate };
+                    Email = user.Email, Age = user.Age, ModifiedDate = DateTime.UtcNow };
                 await db.ExecuteAsync(sqlQuery, parameters);
             }
             return user;

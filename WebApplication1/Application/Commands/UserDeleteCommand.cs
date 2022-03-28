@@ -9,22 +9,23 @@ using WebApplication1.DTO;
 
 namespace WebApplication1.Application.Commands
 {
-    public class DeleteUser
+    public class UserDeleteCommand : IRequest<UserDto>
     {
-        public class Command : IRequest<UserDto>
+        public long Id { get; set; }
+        public UserDeleteCommand(long id)
         {
-            public long Id { get; set; }
+            this.Id = id;
         }
-        public class Handler : IRequestHandler<Command, UserDto>
+        public sealed class UserDeleteCommandHandler : IRequestHandler<UserDeleteCommand, UserDto>
         {
             private readonly IUserRepository repository;
             private IMapper mapper;
-            public Handler(IUserRepository repository, IMapper mapper)
+            public UserDeleteCommandHandler(IUserRepository repository, IMapper mapper)
             {
                 this.repository = repository;
                 this.mapper = mapper;
             }
-            public async Task<UserDto> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<UserDto> Handle(UserDeleteCommand request, CancellationToken cancellationToken)
             {
                 return mapper.Map<UserDto>(await repository.DeleteAsync(request.Id));
             }

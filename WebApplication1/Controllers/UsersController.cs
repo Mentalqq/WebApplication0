@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var result = new UserGetResponse { Users = await mediator.Send(new GetUsers.Query()) };
+            var result = new UserGetResponse { Users = await mediator.Send(new UsersGetQuery()) };
             if (result == null)
                 return NotFound();
             return Ok(result);
@@ -39,7 +39,7 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(long id)
         {
-            var result = new UserGetByIdResponse { User = await mediator.Send(new GetUserById.Query { Id = id }) };
+            var result = new UserGetByIdResponse { User = await mediator.Send(new UserGetByIdQuery(id)) };
             if (result == null)
                 return NotFound();
             return Ok(result);
@@ -49,7 +49,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] UserAddRequest user)
         {
-            var result = await mediator.Send(new AddUser.Command { 
+            var result = await mediator.Send(new UserAddCommand { 
                 UserDto = mapper.Map<UserDto>(user) });
             return Ok(result);
         }
@@ -57,12 +57,12 @@ namespace WebApplication1.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromBody] UserUpdateRequest user, long id)
         {
-            var existUser = new UserGetByIdResponse { User = await mediator.Send(new GetUserById.Query { Id = id }) };
+            var existUser = new UserGetByIdResponse { User = await mediator.Send(new UserGetByIdQuery(id)) };
             if (existUser.User == null)
             {
                 return BadRequest($"No client found with the id {id}");
             }
-            var result = await mediator.Send(new UpdateUser.Command { 
+            var result = await mediator.Send(new UserUpdateCommand { 
                 Id = id, UserDto = mapper.Map<UserDto>(user) });
             return Ok(result);
         }

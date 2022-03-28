@@ -21,25 +21,22 @@ namespace WebApplication1.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IMediator mediator;
-        //private readonly IConfiguration _configuration;
 
-        public AuthenticateController(IMediator mediator)//, IConfiguration configuration)
+        public AuthenticateController(IMediator mediator)
         {
             this.mediator = mediator;
-            //_configuration = configuration;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] User model)
         {
-            var existUser = await mediator.Send(new GetUserById.Query { Id = model.Id });
+            var existUser = await mediator.Send(new UserGetByIdQuery(model.Id));
             var identity = await GetIdentity(model);
             if (existUser != null)
             {
-                //var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT: SecretKey"]));
                 var token = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,//_configuration["JWT: ValidIssuer"],
-                    audience: AuthOptions.AUDIENCE,//_configuration["JWT: ValidAudience"],
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
                     notBefore: DateTime.UtcNow,
                     claims: identity.Claims,
                     expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
@@ -55,7 +52,7 @@ namespace WebApplication1.Controllers
         }
         private async Task<ClaimsIdentity> GetIdentity(User user)
         {
-            var existUser = new UserGetByIdResponse { User = await mediator.Send(new GetUserById.Query { Id = user.Id }) };
+            var existUser = new UserGetByIdResponse { User = await mediator.Send(new UserGetByIdQuery(user.Id)) };
             if (existUser != null)
             {
                 var claims = new List<Claim>
