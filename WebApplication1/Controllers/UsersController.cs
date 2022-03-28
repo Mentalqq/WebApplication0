@@ -11,6 +11,7 @@ using WebApplication1.ViewModel;
 using WebApplication1.DTO;
 using WebApplication1.Application.Options;
 using AutoMapper;
+using System.Collections.Generic;
 
 namespace WebApplication1.Controllers
 {
@@ -30,7 +31,11 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var result = new UserGetResponse { Users = await mediator.Send(new UsersGetQuery()) };
+            List<UserDto> result = await mediator.Send(new UsersGetQuery());
+            var response = new UserGetResponse
+            {
+                Users = result
+            };
             if (result == null)
                 return NotFound();
             return Ok(result);
@@ -39,10 +44,14 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(long id)
         {
-            var result = new UserGetByIdResponse { User = await mediator.Send(new UserGetByIdQuery(id)) };
+            UserDto result = await mediator.Send(new UserGetByIdQuery(id));
+            var response = new UserGetByIdResponse
+            {
+                User = result
+            };
             if (result == null)
                 return NotFound();
-            return Ok(result);
+            return Ok(response);
 
         }
 
