@@ -60,10 +60,14 @@ namespace WebApplication1.Data
                 return false;
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "update Users set FirstName = @FN, LastName = @LN, Email = @E, " +
-                    "Age = @A, ModifiedDate = @MD where Id = @Id";
-                var parameters = new { Id = id, FN = user.FirstName, LN = user.LastName,
-                    E = user.Email, A = user.Age, MD = DateTime.UtcNow };
+                var sqlQuery = @"update Users set FirstName = @FirstName, 
+                    LastName = @LastName, 
+                    Email = @Email, 
+                    Age = @Age, 
+                    ModifiedDate = @ModifiedDate 
+                    where Id = @Id";
+                var parameters = new { Id = id, FirstName = user.FirstName, LastName = user.LastName,
+                    Email = user.Email, Age = user.Age, ModifiedDate = DateTime.UtcNow };
                 await db.ExecuteAsync(sqlQuery, parameters);
             }
             return true;

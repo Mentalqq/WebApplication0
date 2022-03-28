@@ -58,8 +58,10 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] UserAddRequest user)
         {
-            var result = await mediator.Send(new UserAddCommand { 
-                UserDto = mapper.Map<UserDto>(user) });
+            var result = await mediator.Send(new UserAddCommand
+            {
+                UserDto = mapper.Map<UserDto>(user)
+            });
             return Ok(result);
         }
 
@@ -71,10 +73,12 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest($"No client found with the id {id}");
             }
-            bool result = await mediator.Send(new UserUpdateCommand { 
-                Id = id, UserDto = mapper.Map<UserDto>(user) });
+            bool result = await mediator.Send(new UserUpdateCommand
+            {
+                Id = id,
+                UserDto = mapper.Map<UserDto>(user)
+            });
             return Ok(result);
         }
-        
     }
 }
