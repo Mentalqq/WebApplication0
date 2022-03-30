@@ -5,6 +5,8 @@ namespace WebApplication1.ViewModel
 {
     public class UserUpdateRequest
     {
+        public long Id { get; set; }
+
         [Required]
         [StringLength(128)]
         public string FirstName { get; set; }

@@ -13,10 +13,10 @@ namespace WebApplication1.Data
 {
     public interface IUserRepository
     {
-        Task<User> AddAsync(User user);
+        Task<bool> AddAsync(User user);
         Task<IEnumerable<User>> GetAllAsync();
         Task<User> GetByIdAsync(long id);
-        Task<bool> UpdateAsync(User user, long id);
+        Task<bool> UpdateAsync(User user);
         Task<bool> DeleteAsync(long id);
     }
     public class UserRepository : IUserRepository
@@ -43,31 +43,30 @@ namespace WebApplication1.Data
                 return sqlQuery.FirstOrDefault();
             }
         }
-        public async Task<User> AddAsync(User user)
+        public async Task<bool> AddAsync(User user)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 user.CreatedDate = DateTime.UtcNow;
                 var sqlQuery = @"insert into Users 
-                    (UserKey,FirstName, LastName, Email, Age, CreatedDate) 
-                    values (@UserKey ,@FirstName, @LastName, @Email, @Age, @CreatedDate)";
+                    (FirstName, LastName, Email, Age, CreatedDate) 
+                    values (@FirstName, @LastName, @Email, @Age, @CreatedDate)";
                 await db.ExecuteAsync(sqlQuery, user);
             }
-            return user;
+            return true;
         }
-        public async Task<bool> UpdateAsync(User user, long id)
+        public async Task<bool> UpdateAsync(User user)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
+                user.ModifiedDate = DateTime.UtcNow;
                 var sqlQuery = @"update Users set FirstName = @FirstName,
                     LastName = @LastName,
                     Email = @Email,
                     Age = @Age,
                     ModifiedDate = @ModifiedDate
                     where Id = @Id";
-                var parameters = new { Id = id, FirstName = user.FirstName, LastName = user.LastName,
-                    Email = user.Email, Age = user.Age, ModifiedDate = DateTime.UtcNow };
-                await db.ExecuteAsync(sqlQuery, parameters);
+                await db.ExecuteAsync(sqlQuery, user);
             }
             return true;
         }

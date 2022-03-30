@@ -29,7 +29,8 @@ namespace WebApplication1.Application.Queries
             }
             public async Task<UserDto> Handle(UserGetByIdQuery request, CancellationToken cancellationToken)
             {
-                return mapper.Map<UserDto>(await repository.GetByIdAsync(request.Id));
+                User user = await repository.GetByIdAsync(request.Id);
+                return mapper.Map<UserDto>(user);
             }
         }
     }

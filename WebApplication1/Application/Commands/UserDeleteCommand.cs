@@ -21,7 +21,8 @@ namespace WebApplication1.Application.Commands
             }
             public async Task<bool> Handle(UserDeleteCommand request, CancellationToken cancellationToken)
             {
-                return await repository.DeleteAsync(request.Id);
+                bool isDeleted = await repository.DeleteAsync(request.Id);
+                return isDeleted;
             }
         }
     }

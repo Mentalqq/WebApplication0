@@ -25,7 +25,8 @@ namespace WebApplication1.Application.Queries
 
             public async Task<List<UserDto>> Handle(UsersGetQuery request, CancellationToken cancellationToken)
             {
-                return mapper.Map<List<UserDto>>(await repository.GetAllAsync()).ToList();
+                IEnumerable<User> users = await repository.GetAllAsync();
+                return mapper.Map<List<UserDto>>(users).ToList();
             }
         }
     }

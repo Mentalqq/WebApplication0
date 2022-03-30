@@ -6,9 +6,6 @@ namespace WebApplication1.ViewModel
     public class UserAddRequest
     {
         [Required]
-        public Guid UserKey { get; set; }
-
-        [Required]
         [StringLength(128)]
         public string FirstName { get; set; }
 

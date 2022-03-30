@@ -12,7 +12,11 @@ namespace WebApplication1.Application.Commands
     public class UserUpdateCommand : IRequest<bool>
     {
         public long Id { get; set; }
-        public UserDto UserDto { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public int Age { get; set; }
+
         public sealed class UserUpdateCommandHandler : IRequestHandler<UserUpdateCommand, bool>
         {
             private readonly IUserRepository repository;
@@ -24,7 +28,15 @@ namespace WebApplication1.Application.Commands
             }
             public async Task<bool> Handle(UserUpdateCommand request, CancellationToken cancellationToken)
             {
-                return await repository.UpdateAsync(mapper.Map<User>(request.UserDto), request.Id);
+                User user = new User
+                {
+                    Id = request.Id,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    Email = request.Email,
+                    Age = request.Age,
+                };
+                return await repository.UpdateAsync(user);
             }
         }
     }
