@@ -31,7 +31,7 @@ namespace WebApplication1.Data
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = await db.QueryAsync<User>("select * from Users");
+                var sqlQuery = await db.QueryAsync<User>("select * from Users order by Id desc");
                 return sqlQuery.ToList();
             }
         }
@@ -48,23 +48,22 @@ namespace WebApplication1.Data
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 user.CreatedDate = DateTime.UtcNow;
-                var sqlQuery = "insert into Users (UserKey,FirstName, LastName, Email, Age, CreatedDate) " +
-                    "values (@UserKey ,@FirstName, @LastName, @Email, @Age, @CreatedDate)";
+                var sqlQuery = @"insert into Users 
+                    (UserKey,FirstName, LastName, Email, Age, CreatedDate) 
+                    values (@UserKey ,@FirstName, @LastName, @Email, @Age, @CreatedDate)";
                 await db.ExecuteAsync(sqlQuery, user);
             }
             return user;
         }
         public async Task<bool> UpdateAsync(User user, long id)
         {
-            if (GetByIdAsync(id) is null)
-                return false;
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = @"update Users set FirstName = @FirstName, 
-                    LastName = @LastName, 
-                    Email = @Email, 
-                    Age = @Age, 
-                    ModifiedDate = @ModifiedDate 
+                var sqlQuery = @"update Users set FirstName = @FirstName,
+                    LastName = @LastName,
+                    Email = @Email,
+                    Age = @Age,
+                    ModifiedDate = @ModifiedDate
                     where Id = @Id";
                 var parameters = new { Id = id, FirstName = user.FirstName, LastName = user.LastName,
                     Email = user.Email, Age = user.Age, ModifiedDate = DateTime.UtcNow };
@@ -74,8 +73,6 @@ namespace WebApplication1.Data
         }
         public async Task<bool> DeleteAsync(long id)
         {
-            if (GetByIdAsync(id) is null)
-                return false;
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "delete from Users where Id = @id";
