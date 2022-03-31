@@ -48,9 +48,11 @@ namespace WebApplication1.Data
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 user.CreatedDate = DateTime.UtcNow;
+                user.ModifiedDate = DateTime.UtcNow;
+                user.UserKey = Guid.NewGuid();
                 var sqlQuery = @"insert into Users 
-                    (FirstName, LastName, Email, Age, CreatedDate) 
-                    values (@FirstName, @LastName, @Email, @Age, @CreatedDate)";
+                    (UserKey, FirstName, LastName, Email, Age, CreatedDate, ModifiedDate) 
+                    values (@UserKey, @FirstName, @LastName, @Email, @Age, @CreatedDate, @ModifiedDate)";
                 await db.ExecuteAsync(sqlQuery, user);
             }
             return true;
