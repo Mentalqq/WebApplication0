@@ -31,14 +31,8 @@ namespace WebApplication1
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<ConnectionStringOptions>(Configuration.GetSection("ConnectionString"));
-
-            services.AddScoped<IRepository, Repository>();
-
-            /*services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MediatR Examples Api", Version = "v1" });
-            });*/
+            services.Configure<DapperConnectionOptions>(Configuration.GetSection("ConnectionStrings"));
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo
@@ -48,14 +42,14 @@ namespace WebApplication1
                     Description = "Authentication and Authorization in ASP.NET 3.1 with JWT and Swagger"
                 });
                 // To Enable authorization using Swagger (JWT)
-                swagger.AddSecurityDefinition("ABC", new OpenApiSecurityScheme()
+                swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey,
-                    Scheme = "ABC",
+                    Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter ‘ABC’ [space] and then your valid token in the text input below.\r\n\r\nExample: \"ABC eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
+                    Description = "Enter ‘Bearer’ [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
                 });
                 swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -65,7 +59,7 @@ namespace WebApplication1
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = "ABC"
+                                Id = "Bearer"
                             }
                         },
                         new string[] {}
@@ -73,6 +67,7 @@ namespace WebApplication1
                 });
         });
 
+            services.AddAutoMapper(typeof(Startup));
             services.AddMediatR(typeof(Startup));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -98,10 +93,13 @@ namespace WebApplication1
                         };
                     });
             services.AddControllers();
+            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(options => options.WithOrigins("http://localhost:4200")
+            .AllowAnyMethod().AllowAnyHeader());
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

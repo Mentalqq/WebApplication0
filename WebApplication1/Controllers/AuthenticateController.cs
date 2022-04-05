@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using WebApplication1.Application.Queries;
 using WebApplication1.Domain;
 using WebApplication1.Application.Options;
+using WebApplication1.ViewModel;
 
 namespace WebApplication1.Controllers
 {
@@ -19,26 +20,23 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly IConfiguration _configuration;
+        private readonly IMediator mediator;
 
-        public AuthenticateController(IMediator mediator, IConfiguration configuration)
+        public AuthenticateController(IMediator mediator)
         {
-            _mediator = mediator;
-            _configuration = configuration;
+            this.mediator = mediator;
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] Client model)
+        public async Task<IActionResult> Login([FromBody] User model)
         {
-            var existClient = await _mediator.Send(new GetClientById.Query { Id = model.Id });
+            var existUser = await mediator.Send(new UserGetByIdQuery(model.Id));
             var identity = await GetIdentity(model);
-            if (existClient != null)
+            if (existUser != null)
             {
-                //var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT: SecretKey"]));
                 var token = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,//_configuration["JWT: ValidIssuer"],
-                    audience: AuthOptions.AUDIENCE,//_configuration["JWT: ValidAudience"],
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
                     notBefore: DateTime.UtcNow,
                     claims: identity.Claims,
                     expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
@@ -52,14 +50,14 @@ namespace WebApplication1.Controllers
             }
             return Unauthorized();
         }
-        private async Task<ClaimsIdentity> GetIdentity(Client client)
+        private async Task<ClaimsIdentity> GetIdentity(User user)
         {
-            Client _client = await _mediator.Send(new GetClientById.Query { Id = client.Id });
-            if (_client != null)
+            var existUser = new UserGetByIdResponse { User = await mediator.Send(new UserGetByIdQuery(user.Id)) };
+            if (existUser != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, _client.Name)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, existUser.User.FirstName)
                 };
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
