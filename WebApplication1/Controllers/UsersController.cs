@@ -12,6 +12,7 @@ using WebApplication1.DTO;
 using WebApplication1.Application.Options;
 using AutoMapper;
 using System.Collections.Generic;
+using WebApplication1.Infrastructure.Models;
 
 namespace WebApplication1.Controllers
 {
@@ -29,29 +30,29 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(CollectionResponse<UserGetResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllAsync()
         {
-            List<UserDto> result = await mediator.Send(new UsersGetQuery());
-            var response = new UserGetResponse
+            IEnumerable<UserDto> data = await mediator.Send(new UsersGetQuery());
+            var mappedData = mapper.Map<IEnumerable<UserDto>, UserGetResponse[]>(data);
+
+            var result = new CollectionResponse<UserGetResponse>
             {
-                Users = result
+                TotalCount = mappedData.Length,
+                Data = mappedData
             };
-            if (result == null)
-                return NotFound();
+
             return Ok(result);
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(SingleEntityResponse<UserGetResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByIdAsync(long id)
         {
-            UserDto result = await mediator.Send(new UserGetByIdQuery(id));
-            var response = new UserGetByIdResponse
-            {
-                User = result
-            };
-            if (result == null)
-                return NotFound();
-            return Ok(response);
+            UserDto data = await mediator.Send(new UserGetByIdQuery(id));
+            var mappedUser = mapper.Map<UserDto, UserGetResponse>(data);
+
+            return Ok(new SingleEntityResponse<UserGetResponse>(mappedUser));
 
         }
 
@@ -71,11 +72,6 @@ namespace WebApplication1.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromBody] UserUpdateRequest user)
         {
-            var existUser = new UserGetByIdResponse { User = await mediator.Send(new UserGetByIdQuery(user.Id)) };
-            if (existUser.User == null)
-            {
-                return BadRequest($"No client found with the id {user.Id}");
-            }
             bool result = await mediator.Send(new UserUpdateCommand
             {
                 Id = user.Id,

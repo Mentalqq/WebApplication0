@@ -52,12 +52,12 @@ namespace WebApplication1.Controllers
         }
         private async Task<ClaimsIdentity> GetIdentity(User user)
         {
-            var existUser = new UserGetByIdResponse { User = await mediator.Send(new UserGetByIdQuery(user.Id)) };
+            var existUser = await mediator.Send(new UserGetByIdQuery(user.Id));
             if (existUser != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, existUser.User.FirstName)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, existUser.FirstName)
                 };
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
