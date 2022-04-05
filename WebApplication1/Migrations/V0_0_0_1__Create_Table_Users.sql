@@ -14,6 +14,4 @@ ModifiedDate datetime2 not null,
 constraint PK_Users primary key (Id),
 constraint UIX_Users_Email unique(Email),
 constraint UIX_Users_UserKey unique(UserKey))
-create index IX_Users_Email on Users(Email);
-create index IX_Users_UserKey on Users(UserKey);
 end
