@@ -13,6 +13,7 @@ using WebApplication1.Application.Options;
 using AutoMapper;
 using System.Collections.Generic;
 using WebApplication1.Infrastructure.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Controllers
 {
@@ -58,7 +59,7 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] UserAddRequest user)
-        { 
+        {
             var result = await mediator.Send(new UserAddCommand
             {
                 FirstName = user.FirstName,

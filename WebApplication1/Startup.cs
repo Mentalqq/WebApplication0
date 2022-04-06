@@ -1,3 +1,4 @@
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -17,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebApplication1.Application.Options;
 using WebApplication1.Data;
+using WebApplication1.PipelineBehaviors;
 
 namespace WebApplication1
 {
@@ -33,6 +35,13 @@ namespace WebApplication1
         {
             services.Configure<DapperConnectionOptions>(Configuration.GetSection("ConnectionStrings"));
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddControllers();
+            services.AddCors();
+            services.AddAutoMapper(typeof(Startup));
+            services.AddMediatR(typeof(Startup));
+            services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo
@@ -66,10 +75,6 @@ namespace WebApplication1
                     }
                 });
         });
-
-            services.AddAutoMapper(typeof(Startup));
-            services.AddMediatR(typeof(Startup));
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
@@ -92,8 +97,6 @@ namespace WebApplication1
                             ValidateIssuerSigningKey = true,
                         };
                     });
-            services.AddControllers();
-            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
