@@ -7,35 +7,28 @@ using WebApplication1.Data;
 
 namespace WebApplication1.Validation
 {
-    public class UserUpdateCommandValidator : AbstractValidator<UserUpdateCommand>
+    public class UserUpdateCommandValidator : BaseValidator<UserUpdateCommand>
     {
-        private readonly IUserRepository repository;
         public UserUpdateCommandValidator(IUserRepository repository)
+            : base(repository)
         {
-            this.repository = repository;
-
-            RuleFor(au => au.FirstName)
+            RuleFor(u => u.FirstName)
                 .NotEmpty().WithMessage("Must be not empty field");
-            RuleFor(au => au.FirstName)
+            RuleFor(u => u.FirstName)
                 .Length(1, 128).WithMessage("Must be more than 1 letter and less than 128");
-            RuleFor(au => au.LastName)
+            RuleFor(u => u.LastName)
                 .NotEmpty().WithMessage("Must be not empty field");
-            RuleFor(au => au.LastName)
+            RuleFor(u => u.LastName)
                 .Length(1, 128).WithMessage("Must be more than 1 letter and less than 128");
-            RuleFor(au => au.Email)
+            RuleFor(u => u.Email)
                 .NotEmpty().WithMessage("Must be not empty field");
-            RuleFor(au => au.Email)
-                .MustAsync(isUnique).WithMessage("Email already exist");
-            RuleFor(au => au.Email)
+            RuleFor(u => u.Email)
+                .MustAsync(IsUnique).WithMessage("Email already exist");
+            RuleFor(u => u.Email)
                 .Length(1, 128).WithMessage("Must be more than 1 letter and less than 128");
-            RuleFor(au => au.Age)
+            RuleFor(u => u.Age)
                 .NotEmpty().WithMessage("Must be not empty field");
-            RuleFor(au => au.Age).GreaterThan(0).LessThan(100);
-        }
-        private async Task<bool> isUnique(string email, CancellationToken arg2)
-        {
-            var users = await repository.GetAllAsync();
-            return users.All(ue => ue.Email.Equals(email));
+            RuleFor(u => u.Age).GreaterThan(0).LessThan(100);
         }
     }
 }
