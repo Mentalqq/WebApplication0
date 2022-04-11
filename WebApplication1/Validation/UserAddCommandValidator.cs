@@ -13,6 +13,11 @@ namespace WebApplication1.Validation
         public UserAddCommandValidator(IUserRepository repository)
             : base(repository)
         {
+            RuleFor(u => u.Email)
+                .MustAsync(IsUnique).WithMessage("Email already exist")
+                .NotEmpty().WithMessage("Must be not empty field")
+                .Length(1, 128).WithMessage("Must be more than 1 letter and less than 128");
+
 
         }
     }

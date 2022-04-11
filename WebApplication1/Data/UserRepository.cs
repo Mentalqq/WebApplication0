@@ -71,6 +71,17 @@ namespace WebApplication1.Data
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
+                if(user.Email == null)
+                {
+                    user.ModifiedDate = DateTime.UtcNow;
+                    var sqlQueryHardCode = @"update Users set FirstName = @FirstName,
+                    LastName = @LastName,
+                    Age = @Age,
+                    ModifiedDate = @ModifiedDate
+                    where Id = @Id";
+                    await db.ExecuteAsync(sqlQueryHardCode, user);
+                    return true;
+                }
                 user.ModifiedDate = DateTime.UtcNow;
                 var sqlQuery = @"update Users set FirstName = @FirstName,
                     LastName = @LastName,

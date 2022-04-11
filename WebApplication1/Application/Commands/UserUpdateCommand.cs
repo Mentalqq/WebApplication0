@@ -29,6 +29,17 @@ namespace WebApplication1.Application.Commands
             }
             public async Task<bool> Handle(UserUpdateCommand request, CancellationToken cancellationToken)
             {
+                if(request.Email == null)
+                {
+                    User userHardCode = new User
+                    {
+                        Id = request.Id,
+                        FirstName = request.FirstName,
+                        LastName = request.LastName,
+                        Age = request.Age,
+                    };
+                    return await repository.UpdateAsync(userHardCode);
+                }
                 User user = new User
                 {
                     Id = request.Id,
@@ -37,6 +48,7 @@ namespace WebApplication1.Application.Commands
                     Email = request.Email,
                     Age = request.Age,
                 };
+                
                 return await repository.UpdateAsync(user);
             }
         }
