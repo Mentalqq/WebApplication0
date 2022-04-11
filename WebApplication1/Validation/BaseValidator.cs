@@ -17,7 +17,7 @@ namespace WebApplication1.Validation
         public async Task<bool> IsUnique(string email, CancellationToken arg2)
         {
             var emails = await repository.GetAllEmailAsync();
-            if (emails.All(e => e.Equals(email)))
+            if (emails.Contains(email))
                 return true;
             else 
                 return false;
