@@ -18,7 +18,7 @@ namespace WebApplication1.Data
         Task<User> GetByIdAsync(long id);
         Task<bool> UpdateAsync(User user);
         Task<bool> DeleteAsync(long id);
-        Task<IEnumerable<string>> GetAllEmailAsync();
+        Task<string> GetEmailAsync(string email);
     }
     public class UserRepository : IUserRepository
     {
@@ -37,12 +37,12 @@ namespace WebApplication1.Data
             }
         }
 
-        public async Task<IEnumerable<string>> GetAllEmailAsync()
+        public async Task<string> GetEmailAsync(string email)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = await db.QueryAsync<string>("select Email from Users");
-                return sqlQuery;
+                var sqlQuery = await db.QueryAsync<string>("select Email from Users where Email = @email", new {email});
+                return sqlQuery.FirstOrDefault();
             }
         }
         public async Task<User> GetByIdAsync(long id)
