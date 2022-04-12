@@ -15,12 +15,5 @@ namespace WebApplication1.Validation
             RuleFor(u => u.Email)
                 .MustAsync((u, p, c) => IsUnique(u.Id, u.Email)).WithMessage("Email already exist (Id + Email)");
         }
-
-        public async Task<bool> IsUnique(long id, string email)
-        {
-            var existUser = await repository.GetUserByEmailAsync(email);
-
-            return existUser == null || existUser.Id == id;
-        }
     }
 }

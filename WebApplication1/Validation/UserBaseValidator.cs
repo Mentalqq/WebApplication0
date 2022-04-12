@@ -33,11 +33,18 @@ namespace WebApplication1.Validation
                 .NotEmpty().WithMessage("Must be not empty field")
                 .GreaterThan(0).LessThan(100);
         }
-        public async Task<bool> IsUnique(string email)
+        public virtual async Task<bool> IsUnique(string email)
         {
             var existUser = await repository.GetUserByEmailAsync(email);
 
             return existUser == null;
+        }
+
+        public virtual async Task<bool> IsUnique(long id, string email)
+        {
+            var existUser = await repository.GetUserByEmailAsync(email);
+
+            return existUser == null || existUser.Id == id;
         }
     }
 }
