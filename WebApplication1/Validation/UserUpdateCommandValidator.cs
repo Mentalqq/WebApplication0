@@ -9,22 +9,18 @@ namespace WebApplication1.Validation
 {
     public class UserUpdateCommandValidator : UserBaseValidator<UserUpdateCommand>
     {
-
         public UserUpdateCommandValidator(IUserRepository repository)
             : base(repository)
         {
             RuleFor(u => u.Email)
-                .MustAsync(IsUnique).WithMessage("Email already exist");
+                .MustAsync((u, p, c) => IsUnique(u.Id, u.Email)).WithMessage("Email already exist (Id + Email)");
         }
 
-        public override async Task<bool> IsUnique(string email, CancellationToken arg2)
+        public async Task<bool> IsUnique(long id, string email)
         {
-            string existEmail = await repository.GetEmailAsync(email);
-            if (existEmail is null)
-                return true;
-            else
-                return false;
-                
+            var existUser = await repository.GetUserByEmailAsync(email);
+
+            return existUser == null || existUser.Id == id;
         }
     }
 }

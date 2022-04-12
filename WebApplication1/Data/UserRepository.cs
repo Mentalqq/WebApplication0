@@ -18,7 +18,7 @@ namespace WebApplication1.Data
         Task<User> GetByIdAsync(long id);
         Task<bool> UpdateAsync(User user);
         Task<bool> DeleteAsync(long id);
-        Task<string> GetEmailAsync(string email);
+        Task<User> GetUserByEmailAsync(string email);
     }
     public class UserRepository : IUserRepository
     {
@@ -37,11 +37,11 @@ namespace WebApplication1.Data
             }
         }
 
-        public async Task<string> GetEmailAsync(string email)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = await db.QueryAsync<string>("select Email from Users where Email = @email", new {email});
+                var sqlQuery = await db.QueryAsync<User>("select * from Users where Email = @email", new {email});
                 return sqlQuery.FirstOrDefault();
             }
         }
@@ -71,17 +71,6 @@ namespace WebApplication1.Data
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                if(user.Email == null)
-                {
-                    user.ModifiedDate = DateTime.UtcNow;
-                    var sqlQueryHardCode = @"update Users set FirstName = @FirstName,
-                    LastName = @LastName,
-                    Age = @Age,
-                    ModifiedDate = @ModifiedDate
-                    where Id = @Id";
-                    await db.ExecuteAsync(sqlQueryHardCode, user);
-                    return true;
-                }
                 user.ModifiedDate = DateTime.UtcNow;
                 var sqlQuery = @"update Users set FirstName = @FirstName,
                     LastName = @LastName,

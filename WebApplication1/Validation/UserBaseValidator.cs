@@ -18,16 +18,6 @@ namespace WebApplication1.Validation
 
             Validation();
         }
-
-        public async virtual Task<bool> IsUnique(string email, CancellationToken arg2)
-        {
-            string existEmail = await repository.GetEmailAsync(email);
-            if (existEmail is null)
-                return true;
-            else 
-                return false;
-        }
-
         public void Validation()
         {
             RuleFor(u => u.FirstName)
@@ -36,12 +26,18 @@ namespace WebApplication1.Validation
             RuleFor(u => u.LastName)
                 .NotEmpty().WithMessage("Must be not empty field")
                 .Length(1, 128).WithMessage("Must be more than 1 letter and less than 128");
-            /*RuleFor(u => u.Email)
+            RuleFor(u => u.Email)
                 .NotEmpty().WithMessage("Must be not empty field")
-                .Length(1, 128).WithMessage("Must be more than 1 letter and less than 128");*/
+                .Length(1, 128).WithMessage("Must be more than 1 letter and less than 128");
             RuleFor(u => u.Age)
                 .NotEmpty().WithMessage("Must be not empty field")
                 .GreaterThan(0).LessThan(100);
+        }
+        public async Task<bool> IsUnique(string email)
+        {
+            var existUser = await repository.GetUserByEmailAsync(email);
+
+            return existUser == null;
         }
     }
 }

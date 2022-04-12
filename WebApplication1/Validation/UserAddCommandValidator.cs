@@ -14,11 +14,7 @@ namespace WebApplication1.Validation
             : base(repository)
         {
             RuleFor(u => u.Email)
-                .MustAsync(IsUnique).WithMessage("Email already exist")
-                .NotEmpty().WithMessage("Must be not empty field")
-                .Length(1, 128).WithMessage("Must be more than 1 letter and less than 128");
-
-
+                .MustAsync((u, p, c) => IsUnique(u.Email)).WithMessage("Email already exist (Email)");
         }
     }
 }

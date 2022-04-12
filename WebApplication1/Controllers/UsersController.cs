@@ -73,18 +73,6 @@ namespace WebApplication1.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromBody] UserUpdateRequest user)
         {
-            UserDto dataHardCode = await mediator.Send(new UserGetByIdQuery(user.Id));
-            if(dataHardCode.Email == user.Email)
-            {
-                bool resultHardCode = await mediator.Send(new UserUpdateCommand
-                {
-                    Id = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Age = user.Age,
-                });
-                return Ok(resultHardCode);
-            }
             bool result = await mediator.Send(new UserUpdateCommand
             {
                 Id = user.Id,
