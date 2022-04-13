@@ -12,13 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using WebApplication1.Application.Options;
 using WebApplication1.Data;
 using WebApplication1.Infrastructure;
@@ -136,12 +131,11 @@ namespace WebApplication1
                 string dbConnectionString = Configuration.GetConnectionString("SqlServerConnection");
 
                 string projectPath = Directory.GetCurrentDirectory();
-
                 var prePath = Path.Combine(projectPath, @"Migrations\Pre");
                 var postPath = Path.Combine(projectPath, @"Migrations\Post");
                 
-
                 using var cnx = new SqlConnection(dbConnectionString);
+
                 var evolvePreScripts = EvolveFactory.Create(cnx, prePath);
                 evolvePreScripts.Migrate();
 

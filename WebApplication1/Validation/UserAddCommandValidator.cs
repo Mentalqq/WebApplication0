@@ -14,7 +14,7 @@ namespace WebApplication1.Validation
             : base(repository)
         {
             RuleFor(u => u.Email)
-                .MustAsync((u, p, c) => IsUnique(u.Email)).WithMessage("Email already exist");
+                .MustAsync((p, c) => IsUnique(0, p)).WithMessage("Email already exist");
         }
     }
 }
