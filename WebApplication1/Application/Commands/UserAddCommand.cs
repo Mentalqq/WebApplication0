@@ -1,14 +1,15 @@
 ﻿using MediatR;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebApplication1.Application.Options;
 using WebApplication1.Data;
 using WebApplication1.Domain;
-using WebApplication1.DTO;
+using WebApplication1.Validation;
 
 namespace WebApplication1.Application.Commands
 {
-    public class UserAddCommand : IRequest<bool>
+    public class UserAddCommand : IRequest<bool>, IUserValidationModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

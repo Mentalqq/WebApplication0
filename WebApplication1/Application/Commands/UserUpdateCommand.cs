@@ -6,10 +6,11 @@ using WebApplication1.Application.Options;
 using WebApplication1.Data;
 using WebApplication1.Domain;
 using WebApplication1.DTO;
+using WebApplication1.Validation;
 
 namespace WebApplication1.Application.Commands
 {
-    public class UserUpdateCommand : IRequest<bool>
+    public class UserUpdateCommand : IRequest<bool>, IUserValidationModel
     {
         public long Id { get; set; }
         public string FirstName { get; set; }
@@ -36,6 +37,7 @@ namespace WebApplication1.Application.Commands
                     Email = request.Email,
                     Age = request.Age,
                 };
+                
                 return await repository.UpdateAsync(user);
             }
         }

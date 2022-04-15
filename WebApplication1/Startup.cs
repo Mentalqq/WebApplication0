@@ -1,3 +1,4 @@
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -11,12 +12,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
+using System.IO;
 using WebApplication1.Application.Options;
 using WebApplication1.Data;
+using WebApplication1.Infrastructure;
+using WebApplication1.PipelineBehaviors;
 
 namespace WebApplication1
 {
@@ -33,6 +34,13 @@ namespace WebApplication1
         {
             services.Configure<DapperConnectionOptions>(Configuration.GetSection("ConnectionStrings"));
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddControllers();
+            services.AddCors();
+            services.AddAutoMapper(typeof(Startup));
+            services.AddMediatR(typeof(Startup));
+            services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo
@@ -66,10 +74,6 @@ namespace WebApplication1
                     }
                 });
         });
-
-            services.AddAutoMapper(typeof(Startup));
-            services.AddMediatR(typeof(Startup));
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
@@ -92,8 +96,6 @@ namespace WebApplication1
                             ValidateIssuerSigningKey = true,
                         };
                     });
-            services.AddControllers();
-            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -103,6 +105,7 @@ namespace WebApplication1
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                RunMigrations(app);
             }
 
             app.UseHttpsRedirection();
@@ -119,6 +122,30 @@ namespace WebApplication1
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void RunMigrations(IApplicationBuilder app)
+        {
+            try
+            {
+                string dbConnectionString = Configuration.GetConnectionString("SqlServerConnection");
+
+                string projectPath = Directory.GetCurrentDirectory();
+                var prePath = Path.Combine(projectPath, @"Migrations\Pre");
+                var postPath = Path.Combine(projectPath, @"Migrations\Post");
+                
+                using var cnx = new SqlConnection(dbConnectionString);
+
+                var evolvePreScripts = EvolveFactory.Create(cnx, prePath);
+                evolvePreScripts.Migrate();
+
+                var evolvePostScripts = EvolveFactory.Create(cnx, postPath);
+                evolvePostScripts.Migrate();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{ex}");
+            }
         }
     }
 }

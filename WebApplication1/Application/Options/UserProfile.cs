@@ -13,6 +13,7 @@ namespace WebApplication1.Application.Options
             CreateMap<UserDto, User>();
             CreateMap<UserAddRequest, UserDto>();
             CreateMap<UserUpdateRequest, UserDto>();
+            CreateMap<UserDto, UserGetResponse>();
         }
     }
 }
