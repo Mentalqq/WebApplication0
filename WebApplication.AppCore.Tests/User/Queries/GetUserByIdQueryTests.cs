@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WebApplication1.Application.Queries;
 using WebApplication1.Data;
 using WebApplication1.DTO;
 using static WebApplication1.Application.Queries.GetUserByIdQuery;
@@ -13,15 +14,25 @@ using static WebApplication1.Application.Queries.GetUserByIdQuery;
 namespace WebApplication1.AppCore.Tests.User.Queries
 {
     [TestClass]
-    public class GetUsersByIdQueryTests
+    public class GetUserByIdQueryTests
     {
         private readonly Mock<IUserRepository> userRepository = new Mock<IUserRepository>();
         private readonly Mock<IMapper> mapper = new Mock<IMapper>();
         private readonly GetUserByIdQueryHandler queryHandler;
 
-        public GetUsersByIdQueryTests()
+        public GetUserByIdQueryTests()
         {
             queryHandler = new GetUserByIdQueryHandler(userRepository.Object, mapper.Object);
+        }
+
+        [TestMethod]
+        public void Handle_WhenIdIsLessThanOne_ShouldThrowArgumentException()
+        {
+            //Arrange
+            long id = 0;
+            //Act
+            //Assert
+            Assert.ThrowsException<ArgumentException>(() => new GetUserByIdQuery(id));
         }
 
         [TestMethod]

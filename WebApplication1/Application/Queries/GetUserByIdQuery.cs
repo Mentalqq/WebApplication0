@@ -16,6 +16,8 @@ namespace WebApplication1.Application.Queries
         public long Id { get; set; }
         public GetUserByIdQuery(long id)
         {
+            if(id < 1)
+                throw new ArgumentException("Id couldn't be less than 1");
             this.Id = id;
         }
         public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>

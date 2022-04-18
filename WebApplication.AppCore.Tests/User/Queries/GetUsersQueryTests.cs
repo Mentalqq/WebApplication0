@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WebApplication1.Application.Queries;
 using WebApplication1.Data;
 using WebApplication1.DTO;
 using static WebApplication1.Application.Queries.GetUsersQuery;
@@ -45,7 +46,7 @@ namespace WebApplication1.AppCore.Tests.User.Queries
                 .Returns(usersDto);
 
             //Act
-            IEnumerable<UserDto> result = await queryHandler.Handle(new Application.Queries.GetUsersQuery(), CancellationToken.None);
+            IEnumerable<UserDto> result = await queryHandler.Handle(new GetUsersQuery(), CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(result);
