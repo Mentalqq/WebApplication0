@@ -11,26 +11,26 @@ using WebApplication1.DTO;
 
 namespace WebApplication1.Application.Queries
 {
-    public class UserGetByIdQuery : IRequest<UserDto>
+    public class GetUserByIdQuery : IRequest<UserDto>
     {
         public long Id { get; set; }
-        public UserGetByIdQuery(long id)
+        public GetUserByIdQuery(long id)
         {
             this.Id = id;
         }
-        public sealed class UserGetByIdQueryHandler : IRequestHandler<UserGetByIdQuery, UserDto>
+        public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
         {
             private readonly IUserRepository repository;
             private readonly IMapper mapper;
-            public UserGetByIdQueryHandler(IUserRepository repository, IMapper mapper)
+            public GetUserByIdQueryHandler(IUserRepository repository, IMapper mapper)
             {
                 this.repository = repository;
                 this.mapper = mapper;
             }
-            public async Task<UserDto> Handle(UserGetByIdQuery request, CancellationToken cancellationToken)
+            public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
             {
                 User user = await repository.GetByIdAsync(request.Id);
-                return mapper.Map<UserDto>(user);
+                return mapper.Map<User,UserDto>(user);
             }
         }
     }

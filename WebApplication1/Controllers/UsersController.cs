@@ -34,7 +34,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(typeof(CollectionResponse<UserGetResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllAsync()
         {
-            IEnumerable<UserDto> data = await mediator.Send(new UsersGetQuery());
+            IEnumerable<UserDto> data = await mediator.Send(new GetUsersQuery());
             var mappedData = mapper.Map<IEnumerable<UserDto>, UserGetResponse[]>(data);
 
             var result = new CollectionResponse<UserGetResponse>
@@ -50,7 +50,7 @@ namespace WebApplication1.Controllers
         [ProducesResponseType(typeof(SingleEntityResponse<UserGetResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByIdAsync(long id)
         {
-            UserDto data = await mediator.Send(new UserGetByIdQuery(id));
+            UserDto data = await mediator.Send(new GetUserByIdQuery(id));
             var mappedUser = mapper.Map<UserDto, UserGetResponse>(data);
 
             return Ok(new SingleEntityResponse<UserGetResponse>(mappedUser));
