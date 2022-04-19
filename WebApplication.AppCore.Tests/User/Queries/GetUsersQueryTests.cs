@@ -17,13 +17,13 @@ namespace WebApplication1.AppCore.Tests.User.Queries
     [TestClass]
     public class GetUsersQueryTests
     {
-        private readonly Mock<IUserRepository> userRepository = new Mock<IUserRepository>();
-        private readonly Mock<IMapper> mapper = new Mock<IMapper>();
+        private readonly Mock<IUserRepository> userRepositoryMock = new Mock<IUserRepository>();
+        private readonly Mock<IMapper> mapperMock = new Mock<IMapper>();
         private readonly GetUsersQueryHandler queryHandler;
 
         public GetUsersQueryTests()
         {
-            queryHandler = new GetUsersQueryHandler(userRepository.Object, mapper.Object);
+            queryHandler = new GetUsersQueryHandler(userRepositoryMock.Object, mapperMock.Object);
         }
 
         [TestMethod]
@@ -37,11 +37,11 @@ namespace WebApplication1.AppCore.Tests.User.Queries
                 new UserDto {},
                 new UserDto {},
             };
-            userRepository
+            userRepositoryMock
                 .Setup(x => x.GetAllAsync())
                 .ReturnsAsync(users);
 
-            mapper
+            mapperMock
                 .Setup(x => x.Map<IEnumerable<Domain.User>, IEnumerable<UserDto>>(users))
                 .Returns(usersDto);
 

@@ -16,13 +16,13 @@ namespace WebApplication1.AppCore.Tests.User.Queries
     [TestClass]
     public class GetUserByIdQueryTests
     {
-        private readonly Mock<IUserRepository> userRepository = new Mock<IUserRepository>();
-        private readonly Mock<IMapper> mapper = new Mock<IMapper>();
+        private readonly Mock<IUserRepository> userRepositoryMock = new Mock<IUserRepository>();
+        private readonly Mock<IMapper> mapperMock = new Mock<IMapper>();
         private readonly GetUserByIdQueryHandler queryHandler;
 
         public GetUserByIdQueryTests()
         {
-            queryHandler = new GetUserByIdQueryHandler(userRepository.Object, mapper.Object);
+            queryHandler = new GetUserByIdQueryHandler(userRepositoryMock.Object, mapperMock.Object);
         }
 
         [TestMethod]
@@ -48,15 +48,16 @@ namespace WebApplication1.AppCore.Tests.User.Queries
                 Email = "User1@gmail.com"
             };
 
-            userRepository
-                .Setup(x => x.GetByIdAsync(userId)).ReturnsAsync(user);
+            userRepositoryMock
+                .Setup(x => x.GetByIdAsync(userId))
+                .ReturnsAsync(user);
 
-            mapper
+            mapperMock
                 .Setup(x => x.Map<Domain.User, UserDto>(user))
                 .Returns(userDto);
 
             //Act
-            UserDto result = await queryHandler.Handle(new Application.Queries.GetUserByIdQuery(userId), CancellationToken.None);
+            UserDto result = await queryHandler.Handle(new GetUserByIdQuery(userId), CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(result);
