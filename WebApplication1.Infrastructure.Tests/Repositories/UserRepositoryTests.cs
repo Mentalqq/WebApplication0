@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebApplication1.Application.Options;
 using WebApplication1.Data;
+using WebApplication1.Infrastructure.Tests.Options;
 
 namespace WebApplication1.Infrastructure.Tests.Repositories
 {
@@ -12,11 +13,11 @@ namespace WebApplication1.Infrastructure.Tests.Repositories
     public class UserRepositoryTests
     {
         private readonly UserRepository userRepository;
-        private readonly ConnectionIOptions<DapperConnectionOptions> connectionIOptions;
+        private readonly MockIOptions<DapperConnectionOptions> connectionIOptions;
 
         public UserRepositoryTests()
         {
-            connectionIOptions = new ConnectionIOptions<DapperConnectionOptions>() 
+            connectionIOptions = new MockIOptions<DapperConnectionOptions>() 
             { 
                 Value = new DapperConnectionOptions() 
             };
