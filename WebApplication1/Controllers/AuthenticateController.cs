@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] User model)
         {
-            var existUser = await mediator.Send(new UserGetByIdQuery(model.Id));
+            var existUser = await mediator.Send(new GetUserByIdQuery(model.Id));
             var identity = await GetIdentity(model);
             if (existUser != null)
             {
@@ -52,7 +52,7 @@ namespace WebApplication1.Controllers
         }
         private async Task<ClaimsIdentity> GetIdentity(User user)
         {
-            var existUser = await mediator.Send(new UserGetByIdQuery(user.Id));
+            var existUser = await mediator.Send(new GetUserByIdQuery(user.Id));
             if (existUser != null)
             {
                 var claims = new List<Claim>

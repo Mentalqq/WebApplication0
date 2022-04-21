@@ -21,11 +21,9 @@ namespace WebApplication1.Application.Commands
         public sealed class UserUpdateCommandHandler : IRequestHandler<UserUpdateCommand, bool>
         {
             private readonly IUserRepository repository;
-            private readonly IMapper mapper;
-            public UserUpdateCommandHandler(IUserRepository repository, IMapper mapper)
+            public UserUpdateCommandHandler(IUserRepository repository)
             {
                 this.repository = repository;
-                this.mapper = mapper;
             }
             public async Task<bool> Handle(UserUpdateCommand request, CancellationToken cancellationToken)
             {
